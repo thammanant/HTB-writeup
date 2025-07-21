@@ -35,7 +35,7 @@
   ![SUDO](SUDO.png)
   - The file `mosh-server` is owned by root, so if we understand what it does, maybe we can use it to gain root privileges.
   - We try running `sudo /usr/bin/mosh-server`.  
-  ![SUDO](SUDO.png)
+  ![Run](Run.png)
   - We started the mosh server at UDP port 60001, so if we can connect to the server, we can gain root privileges.
   - We use the command `mosh --server="sudo /usr/bin/mosh-server" localhost`. The client will start the server with root privileges and connect to it, giving us a root shell.
   - We get the root flag.
