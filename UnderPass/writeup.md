@@ -13,7 +13,7 @@
   - We now move on to the enumerated UDP service; we see SNMP, so we use the command `snmpwalk -v2c -c public 10.10.11.48` to retrieve a tree of management information.  
   ![SNMP_Scan](SNMP_Scan.png)
   - We add `10.10.11.48 underpass.htb` to the file `/etc/hosts`.
-  - We enumerate subdomains for `underpass.htb` using command `gobuster dns -d underpass.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt -t 50` but find nothing.
+  - We try Virtual Host Enumeration for `underpass.htb` using command `wfuzz -u unederpass.htb -H "Host: FUZZ.underpass.htb" -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt --hh 199691` but find nothing.
   - Since we know that the server is using daloRADIUS, I try to enumerate the path `/daloradius` using the command `dirsearch -u underpass.htb/daloradius`.  
   ![Dirsearch_Scan](Dirsearch_Scan.png)
   - We enumerate further and find `http://underpass.htb/daloradius/app/users/login.php` and `http://underpass.htb/daloradius/app/operators/login.php`.
