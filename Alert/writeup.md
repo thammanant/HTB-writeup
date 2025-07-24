@@ -51,9 +51,9 @@
 ![Crack1](Crack1.png)
 ![Crack2](Crack2.png)
   - After cracking the credentials, we use them to log in to `http://statistics.alert.htb`.
+  - We enumerate the web app with `dirsearch` again but find nothing useful.
 
 ## Privilege Escalation
-  - We enumerate the web app with `dirsearch` again but find nothing useful.
   - We then SSH into the box as `albert` using the recovered credentials and capture the user flag.
   - Running `sudo -l` confirms `albert` has no sudo privileges.
   - Running `id`, we find albert is part of the `management` group (GID 1001).
