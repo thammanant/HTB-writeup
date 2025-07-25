@@ -13,7 +13,7 @@
 
 ## Exploitation
   - Attempts to authenticate with default or common credentials were unsuccessful.
-  - A user registration feature was available, which allowed us to create an account. After logging in, analysis of the session cookie suggested it was signed using **Flask's `itsdangerous`** module.
+  - A user registration feature was available, which allowed us to create an account. After logging in, analysis of the session cookie suggested it was signed using **Flask** module.
   - Further inspection revealed functionality allowing users to upload `.cif` files for processing.
   - After researching known vulnerabilities, we discovered **CVE-2024-23346**, a code execution vulnerability affecting CIF parsing in this environment.
 ![CVE1](CVE1.png)
