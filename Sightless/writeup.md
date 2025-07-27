@@ -39,7 +39,7 @@
   - Using michael’s credentials, we SSH’d into the machine and obtained the **user flag**.
 
   - Further enumeration revealed a configuration file indicating additional services.  
-![Config](Condfig.png)
+![Config](Config.png)
 
   - We created an SSH tunnel forwarding remote port 8080 to our local machine:  
     `ssh michael@10.10.11.32 -L 8080:localhost:8080`
