@@ -60,7 +60,7 @@
 ![DevTools](DevTools.png)
 
   - Using a Chromium-based browser, we navigated to `chrome://inspect/#devices` and configured it to discover network targets at `localhost:37795`.  
-![DevTools](DevTools.png)
+![Target](Target.png)
 
   - This exposed a Froxlor page within DevTools.
 
