@@ -76,6 +76,7 @@
 ![John2](John2.png)
 
   - We changed the FTP password to a recommended secure password.
+![John3](John3.png)
 
   - Using John’s FTP credentials, we connected via `lftp`, enforcing SSL/TLS with:  
     `lftp -u web1,cBzhpLldvi -e "set ftp:ssl-force true; set ssl:verify-certificate no" ftp://10.10.11.32`  
