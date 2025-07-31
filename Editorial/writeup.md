@@ -1,4 +1,4 @@
-<img width="1418" height="710" alt="image" src="https://github.com/user-attachments/assets/18bc9496-44ee-469a-a7ad-7e2d90fb5c41" /># Editorial Writeup - by Thammanant Thamtaranon  
+Editorial Writeup - by Thammanant Thamtaranon  
 - Editorial is an easy Linux-based machine hosted on Hack The Box.
 
 ## Reconnaissance  
