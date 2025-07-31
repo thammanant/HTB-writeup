@@ -1,4 +1,4 @@
-Editorial Writeup - by Thammanant Thamtaranon  
+# Editorial Writeup - by Thammanant Thamtaranon  
 - Editorial is an easy Linux-based machine hosted on Hack The Box.
 
 ## Reconnaissance  
