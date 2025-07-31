@@ -32,4 +32,12 @@
 - We got the user flag.
   
 ### Privilege Escalation:
+- We try run `sudo -l`, but dev have no permission to run sudo.
+- We found the .git file in dev directory so we use the command `git log -p` to see all the changes.
+- We found user prod password.
+![Prod](Prod.png)
+- We use command `su prod` to change to prod user.
+- We run `sudo -l` and found that user prod can sudo.
+![SUDO](SUDO.png)
 - 
+
