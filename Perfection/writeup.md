@@ -31,7 +31,8 @@
 - We captured the **user flag**.
 
 ## Privilege Escalation  
-- Credentials were found in `pupilpath_credentials.db` but were initially uncrackable.  
+- Credentials were found in `pupilpath_credentials.db` but were initially uncrackable.
+![Credentials](Credentials.png)  
 - Inspecting susan’s emails revealed hints to crack the password.  
 ![Mail](Mail.png)  
 - We used Hashcat with the command:  
