@@ -31,7 +31,7 @@
 
 - After a few login attempts, I was rate-limited, so I looked for another way in.
 
-- Since the login panel looked like Metabase, I searched for known Metabase vulnerabilities.
+- Since the login panel is Metabase, I searched for known Metabase vulnerabilities.
 
 - I found `CVE-2023-38646`, which abuses a setup token from `/api/session/properties`.  
   - This endpoint also discloses the Metabase version in the response.
