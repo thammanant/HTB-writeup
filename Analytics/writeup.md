@@ -69,7 +69,7 @@
   - `CVE-2023-0386` worked.
 
 - **CVE-2023-0386** is a privilege escalation vulnerability in OverlayFS.  
-  - It **abuses improper capability retention** when a file with elevated capabilities is copy-up’d from lowerdir to upperdir.
+  - It **abuses improper capability retention**.
   - This allows a non-root user in a new user namespace to execute a binary with `cap_setuid`, effectively gaining root.
 
 - I used the following exploit chain:
