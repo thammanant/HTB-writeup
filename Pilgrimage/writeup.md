@@ -34,9 +34,10 @@
 ![Index](Index.png)
 - We then run `./magick -version`.
 ![Version](Version.png)
-- 
+- We then search for ImageMagick 7.1 CVE and found `CVE-2022-44268 `.
 
 ## Exploitation  
-- We use the command
+- 
+- 
 
 ## Privilege Escalation  
