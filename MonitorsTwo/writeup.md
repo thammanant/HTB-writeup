@@ -3,8 +3,7 @@
 - MonitorsTwo is an easy Linux-based machine hosted on Hack The Box.
 
 ## Reconnaissance  
-- I began with a full TCP port scan including service/version detection and OS fingerprinting:  
-  `nmap -A -T4 -p- 10.10.11.211`  
+- I began with a full TCP port scan including service/version detection and OS fingerprinting:  `nmap -A -T4 -p- 10.10.11.211`  
 
 ![Nmap_Scan](Nmap_Scan.png)  
 
@@ -61,16 +60,14 @@
 
 ![Cracked](Cracked.png)  
 
-- The cracked credentials granted SSH access as the `marcus` user:  
-  `ssh marcus@10.10.11.211`  
+- The cracked credentials granted SSH access as the `marcus` user:  `ssh marcus@10.10.11.211`  
 
 ![Marcus](Marcus.png)
 
 - I then captured the user flag.
 
 ## Privilege Escalation  
-- Checking sudo privileges revealed that, unfortunately, user `marcus` was not permitted to execute any commands via sudo:  
-  `sudo -l`  
+- Checking sudo privileges revealed that, unfortunately, user `marcus` was not permitted to execute any commands via sudo:  `sudo -l`  
 
 - We found a mail for user `marcus`.
 
