@@ -72,8 +72,6 @@
 - Checking sudo privileges revealed that, unfortunately, user `marcus` was not permitted to execute any commands via sudo:  
   `sudo -l`  
 
-![SUDO](SUDO.png)
-
 - We found a mail for user `marcus`.
 
 ![Mail](Mail.png)
