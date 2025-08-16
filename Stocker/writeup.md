@@ -29,7 +29,7 @@
 ## Exploitation  
 - I tried searching for CVEs in Node.js and Express (2022–2023) but found nothing useful, so I attempted to bypass authentication instead.
 - We used `SQLMap` to test for SQL Injection, but it was unsuccessful.
-- Next, we tried NoSQL Injection based on HackTricks guidance (`https://book.hacktricks.wiki/en/pentesting-web/nosql-injection.html#basic-authentication-bypass`).  
+- Next, we tried NoSQL Injection based on HackTricks guidance (https://book.hacktricks.wiki/en/pentesting-web/nosql-injection.html#basic-authentication-bypass).  
 ![NoSQL_Injection](NoSQL_Injection.png)  
 - We tested both URL and JSON formats.   
 ![Stock](Stock.png)  
