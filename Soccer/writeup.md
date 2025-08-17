@@ -44,8 +44,7 @@
 - I tested for SQL Injection using payloads from [PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/SQL%20Injection/Intruder/SQL-Injection).  
 - We discovered that `{"id":"1 OR 1 -- -"}` returned “Ticket Exists,” indicating SQL Injection is possible.  
 - Since the response only returned “Ticket Exists” or “Ticket Doesn't Exist,” it was a blind SQL Injection.  
-- While SQLMap could automate this, we wrote a custom Python script to exploit it.  
-[Exploit](exploit.py)  
+- While SQLMap could automate this, we wrote a custom Python script to exploit it.  [Exploit](exploit.py)  
 
 - After obtaining the user `player` credentials, we SSHed into the machine.  
 ![Player](Player.png)  
