@@ -1,10 +1,9 @@
-
 # MetaTwo Writeup - by Thammanant Thamtaranon  
 - MetaTwo is an easy Linux-based machine hosted on Hack The Box.
 
 ## Reconnaissance  
 - I started with a full TCP port scan including service/version detection and OS fingerprinting:  
-  `nmap -A -T4 -p- 10.10.11.196`  
+  `nmap -A -T4 -p- 10.10.11.186`  
 ![Nmap_Scan](Nmap_Scan.png)  
 - The scan showed two open ports:  
   - 22 (SSH)  
