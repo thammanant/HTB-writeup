@@ -3,7 +3,7 @@
 
 ## Reconnaissance  
 - I started with a full TCP port scan including service/version detection and OS fingerprinting using the command:  
-  `nmap -A -T4 -p- 10.10.11.204`  
+  `nmap -A -T4 -p- 10.10.11.182`  
 ![Nmap_Scan](Nmap_Scan.png)  
 - The scan showed two open ports:
   - 22 (SSH)
