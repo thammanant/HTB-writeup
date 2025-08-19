@@ -7,12 +7,16 @@
 ![Nmap_Scan](Nmap_Scan.png)  
 - The scan showed two open ports:
   - 22 (SSH)
-  - 8080 (HTTP).
-- I added `analytical.htb` to `/etc/hosts` for proper hostname resolution.
+  - 80 (HTTP).
+- I added `photobomb.htb` to `/etc/hosts` for proper hostname resolution.
 
 ## Scanning & Enumeration  
-- I ran a directory brute-force using `dirsearch` with `dirsearch -u 10.10.11.204:8080` and discovered the `/upload` path. When I uploaded a file there, it returned a link to view the uploaded image, which used the path `show_image?img=`.  
-![Dirsearch_Scan](Dirsearch_Scan.png)  
+- I ran a directory brute-force using `dirsearch`: `dirsearch -u photobomb.htb`
+![Dirsearch_Scan](Dirsearch_Scan.png)
+- I then enumerated virtual hosts using `ffuf`:  
+  `ffuf -u http://photobomb.htb -H "Host: FUZZ.photobomb.htb" -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-20000.txt -mc all -ac`  
+![VHost](VHost.png)  
+- I discovered `data.photobomb.htb`, so I added that to `/etc/hosts` as well.
 
 ## Exploitation  
 
