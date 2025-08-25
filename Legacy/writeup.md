@@ -12,8 +12,7 @@
   - 445 (SMB)
 
 ## Scanning & Enumeration  
-- We then ran an Nmap script scan for vulnerabilities:  
-  `nmap -p 135,139,445 --script vuln 10.10.10.4`  
+- We then ran an Nmap script scan for vulnerabilities:  `nmap -p 135,139,445 --script vuln 10.10.10.4`  
 ![Vul_Scan1](Vul_Scan1.png)  
 ![Vul_Scan2](Vul_Scan2.png)  
 - We found **CVE-2008-4250** and **CVE-2017-0143 (EternalBlue)**. Since we already exploited EternalBlue on the Blue machine, we focused on **CVE-2008-4250** this time.  
