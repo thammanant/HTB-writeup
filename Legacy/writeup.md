@@ -3,28 +3,24 @@
 
 ## Reconnaissance  
 - I started with a full TCP port scan including service/version detection and OS fingerprinting:  
-  `nmap -A -T4 -p- 10.10.11.233`  
-![Nmap_Scan](Nmap_Scan.png)  
-- The scan showed two open ports:  
-  - 22 (SSH)  
-  - 80 (HTTP)  
-- I added `analytical.htb` to `/etc/hosts` for proper hostname resolution.
+  `nmap -A -T4 -Pn -p- 10.10.10.4`  
+![Nmap_Scan1](Nmap_Scan1.png)  
+![Nmap_Scan2](Nmap_Scan2.png)  
+- The scan showed three open ports:  
+  - 135 (MSRPC)  
+  - 139 (NetBIOS)  
+  - 445 (SMB)
 
 ## Scanning & Enumeration  
-- I ran a directory brute-force using `dirsearch`:  
-  `dirsearch -u http://analytical.htb`  
-![Dirsearch_Scan](Dirsearch_Scan.png)  
-- No interesting directories were found.
-
-- I then enumerated virtual hosts using `ffuf`:  
-  `ffuf -u http://analytical.htb -H "Host: FUZZ.analytical.htb" -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-20000.txt -mc all -ac`  
-![VHost](VHost.png)  
-- I discovered `data.analytical.htb`, so I added that to `/etc/hosts` as well.
-
-- Visiting `http://data.analytical.htb/` redirected to the login page:  
-  `http://data.analytical.htb/auth/login?redirect=%2F`
+- We then ran an Nmap script scan for vulnerabilities:  
+  `nmap -p 135,139,445 --script vuln 10.10.10.4`  
+![Vul_Scan1](Vul_Scan1.png)  
+![Vul_Scan2](Vul_Scan2.png)  
+- We found **CVE-2008-4250** and **CVE-2017-0143 (EternalBlue)**. Since we already exploited EternalBlue on the Blue machine, we focused on **CVE-2008-4250** this time.  
+- **CVE-2008-4250** is a remote code execution vulnerability in the Server service (`srvsvc.dll`) on Windows.  
+- A crafted RPC request is sent to the Server Service over SMB/RPC. Due to improper bounds checking, the function overflows memory (buffer overflow), allowing an attacker to inject arbitrary shellcode and execute it with SYSTEM privileges.
 
 ## Exploitation  
-
-
-## Privilege Escalation  
+- We then ran `msfconsole`, searched for `CVE-2008-4250`, filled in the exploit options, and ran it.  
+![Shell](Shell.png)  
+- We then retrieved the user flag from John’s Desktop and the root flag from the Administrator’s Desktop.
