@@ -4,7 +4,7 @@
 ## Reconnaissance  
 - I started with a full TCP port scan including service/version detection and OS fingerprinting:
 ```bash
-nmap -A -T4 -p- 10.10.10.152
+nmap -A -T4 -p- 10.10.10.108
 ```
 ![Nmap_Scan](Nmap_Scan.png)  
 - The scan showed multiple open ports:  
