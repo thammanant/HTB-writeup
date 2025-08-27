@@ -8,45 +8,53 @@ nmap -A -T4 -p- 10.10.10.152
 ```
 ![Nmap_Scan](Nmap_Scan.png)  
 - The scan showed multiple open ports:  
-  - 80 (HTTP)
-  - 88 (Kerberos)
-  - 135 (MSRPC)
-  - 139 (NETBIOS)
-  - 389 (LDAP)
-  - 445 (SMB)
-  - 464 (kpasswd5)
-  - 636 (LDAPS)
-  - 3268 (LDAPS)
-  - 3269 (LDAPS)
-  - 5985 (WINRM)
+  - 80 (HTTP)  
+  - 88 (Kerberos)  
+  - 135 (MSRPC)  
+  - 139 (NETBIOS)  
+  - 389 (LDAP)  
+  - 445 (SMB)  
+  - 464 (kpasswd5)  
+  - 636 (LDAPS)  
+  - 3268 (LDAPS)  
+  - 3269 (LDAPS)  
+  - 5985 (WINRM)  
   - 9389 (AD Web Services)
 
-## Scanning & Enumeration 
-- I ran a directory brute-force using `dirsearch`:  
-  `dirsearch -u 10.10.11.108`  
-![Dirsearch_Scan](Dirsearch_Scan.png)
-- In `/settings.php`, we founded Server address, Server Port, and Username.
-![Setting](Setting.png)
-- Clicking the update button sent a request with only IP as the parameter.
-![Request](Request.png)
-- I then try changing the IP to my IP and run `nc -lvnp 389` on my machine.
-- We got a connect that looks like a password.
-![Password](Password.png)
-- We then use netexec to check if the credential work for any service.
+## Scanning & Enumeration  
+- I ran a directory brute-force using `dirsearch`:
+```bash
+dirsearch -u 10.10.11.108
+```
+![Dirsearch_Scan](Dirsearch_Scan.png)  
+- In `/settings.php`, we found the server address, server port, and username.  
+![Setting](Setting.png)  
+- Clicking the update button sent a request with only `ip` as the parameter.  
+![Request](Request.png)  
+- We then changed the `ip` to our machine and ran `nc -lvnp 389` to listen.  
+- We got a connection that looked like a password.  
+![Password](Password.png)  
+- Using `netexec`, we verified that the credentials worked for multiple services.  
 ![Services](Services.png)
 
 ## Exploitation  
-- Since the credntial works for all the services, I try connect to SMB first.
-![SMB](SMB.png)
-- As we are a high privilege I try use the `psexec` but failed because we do not have the write priviledge.
-- So we move on to the WinRM, we use `evil-winrm`:  `evil-winrm -i 10.10.11.108 -u svc-printer -p '1edFg43012!!'`.
-![Shell](Shell.png)
-- We capture the user flag.
+- Since the credentials worked for all services, we first tried connecting to SMB.  
+![SMB](SMB.png)  
+- Being high-privilege, we attempted `psexec` but it failed due to missing write privileges.  
+- We moved on to WinRM, using `evil-winrm`:
+```bash
+evil-winrm -i 10.10.11.108 -u svc-printer -p '1edFg43012!!'
+```
+![Shell](Shell.png)  
+- We captured the user flag.
 
 ## Privilege Escalation  
-- We run the command `whoami /priv` to check for current user privilege.
-![Priv](Priv.png)
-- Then we run the command `whoami /groups` to check if the user is part of any groups.
-![Groups](Groups.png)
-- 
-
+- We ran `whoami /priv` to check current user privileges.  
+![Priv](Priv.png)  
+- Then ran `whoami /groups` to verify group memberships.  
+![Groups](Groups.png)  
+- We attempted using `SeBackupPrivilege` to copy `SAM` and `SYSTEM` files.  
+- After extracting NTLM hashes, pass-the-hash attempts failed.  
+- We then explored the Server Operators group following [this guide](https://www.hackingarticles.in/windows-privilege-escalation-server-operator-group/)   
+- We gained SYSTEM privileges and captured the root flag.  
+![Root](Root.png)
