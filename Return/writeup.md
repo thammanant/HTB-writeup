@@ -44,6 +44,8 @@ nmap -A -T4 -p- 10.10.10.152
 - We capture the user flag.
 
 ## Privilege Escalation  
+- We run the command `whoami /priv` to check for current user privilege.
+![Priv](Priv.png)
 - 
 
 
