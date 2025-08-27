@@ -55,6 +55,6 @@ evil-winrm -i 10.10.11.108 -u svc-printer -p '1edFg43012!!'
 ![Groups](Groups.png)  
 - We attempted using `SeBackupPrivilege` to copy `SAM` and `SYSTEM` files.  
 - After extracting NTLM hashes, pass-the-hash attempts failed.  
-- We then explored the Server Operators group following [this guide](https://www.hackingarticles.in/windows-privilege-escalation-server-operator-group/)   
+- We then explored the `Server Operators group` following the [Guide](https://www.hackingarticles.in/windows-privilege-escalation-server-operator-group/)   
 - We gained SYSTEM privileges and captured the root flag.  
 ![Root](Root.png)
