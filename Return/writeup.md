@@ -46,6 +46,7 @@ nmap -A -T4 -p- 10.10.10.152
 ## Privilege Escalation  
 - We run the command `whoami /priv` to check for current user privilege.
 ![Priv](Priv.png)
+- Then we run the command `whoami /groups` to check if the user is part of any groups.
+![Groups](Groups.png)
 - 
-
 
