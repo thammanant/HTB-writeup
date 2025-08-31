@@ -47,7 +47,7 @@ netexec ldap CICADA-DC.cicada.htb -u michael.wrightson -p 'Cicada$M6Corpb*@Lp#nZ
 - We tried using `netexec winrm` for `david.orelious` but failed. We then connected to `DEV` directory in SMB as `david.orelious` and found `Backup_script.ps1` which contained credentials for `emily.oscars`.  
 ![DEV](DEV.png)  
 ![Script](Script.png)  
-- We then checked SMB access for `emily.oscars` and confirmed that this user could read the `ADMIN$` directory.  
+- We then checked SMB and WinRM access for `emily.oscars` and confirmed that this user could read the `ADMIN$` directory.  
 ![Emily](Emily.png)
 
 ## Exploitation  
