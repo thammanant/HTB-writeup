@@ -21,7 +21,7 @@
 - We extracted the JAR for inspection: `jar xf myfile.jar`  
   ![Extract](Extract.png)  
 - In the extracted tree, under `/com/myfirstplugin`, I disassembled `BlockyCore.class` using `javap -c BlockyCore.class` and recovered embedded credentials.  
-  ![Plugin](Plugin.png)
+  ![SQLPASS](SQLPASS.png)
 
 - We identified that the site is running WordPress and executed a WordPress enumeration scan:  
   `wpscan --url blocky.htb`  
