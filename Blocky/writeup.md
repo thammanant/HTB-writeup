@@ -2,55 +2,53 @@
 - Blocky is an easy Linux-based machine hosted on Hack The Box.
 
 ## Reconnaissance  
-- I started with a full TCP port scan including service/version detection and OS fingerprinting:  
+- I began with a full TCP port scan including service/version detection and OS fingerprinting:  
   `nmap -A -T4 -p- 10.10.10.37`  
-![Nmap_Scan](Nmap_Scan.png)  
-- The scan showed two open ports:  
-  - 21 (FTP)  
-  - 22 (SSH)
-  - 80 (HTTP)
-  - 25565 (Minecraft)  
+  ![Nmap_Scan](Nmap_Scan.png)  
+- The scan revealed the following open ports:  
+  - **21** — FTP  
+  - **22** — SSH  
+  - **80** — HTTP  
+  - **25565** — Minecraft  
 - I added `blocky.htb` to `/etc/hosts` for proper hostname resolution.
 
 ## Scanning & Enumeration  
-- Looking through the website we saw the author name `Notch`, we will note that down.
-- I ran a directory brute-force using `dirsearch`:  
-  `dirsearch -u http://blocky.htb`  
-![Dirsearch_Scan](Dirsearch_Scan.png)
-- The path `plugins` have 2 jar file.
-![Plugin](Plugin.png)
--  We then extract the file using `jar xf myfile.jar`
-![Extract](Extract.png)
--  In `/com/myfirstplugin` using `javap -c BlockyCore.class`, we found the credential
- ![Plugin](Plugin.png)
+- While reviewing the website we observed the author name **Notch** and recorded it as an intelligence lead.  
+- I performed a directory brute-force using `dirsearch`: `dirsearch -u http://blocky.htb`  
+  ![Dirsearch_Scan](Dirsearch_Scan.png)  
+- The `plugins` directory contained two JAR files.  
+  ![Plugin](Plugin.png)  
+- We extracted the JAR for inspection: `jar xf myfile.jar`  
+  ![Extract](Extract.png)  
+- In the extracted tree, under `/com/myfirstplugin`, I disassembled `BlockyCore.class` using `javap -c BlockyCore.class` and recovered embedded credentials.  
+  ![Plugin](Plugin.png)
 
-- We founded that the web is using wordpress so we ran the wordpress scan: `wpscan --url blocky.htb`
-![WP_Scan1](WP_Scan1.png)
-![WP_Scan2](WP_Scan2.png)
-![WP_Scan3](WP_Scan3.png)
-- Nothing intersting was founded
+- We identified that the site is running WordPress and executed a WordPress enumeration scan:  
+  `wpscan --url blocky.htb`  
+  ![WP_Scan1](WP_Scan1.png)  
+  ![WP_Scan2](WP_Scan2.png)  
+  ![WP_Scan3](WP_Scan3.png)  
+- The WordPress scan did not return any actionable findings.
 
-- I then enumerated virtual hosts using `ffuf`:  
+- We then enumerated virtual hosts using `ffuf`:  
   `ffuf -u http://blocky.htb -H "Host: FUZZ.blocky.htb" -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-20000.txt -mc all -ac`  
-- Nothing was founded.
+- No additional virtual hosts were discovered.
 
 ## Exploitation  
-- Using the credential we found on `http://blocky.htb/phpmyadmin/`, we are able to get it as root.
-![PHPMyAdmin](PHPMyAdmin.png)
-- We then found Notch's credential.
-![Notch_Credential](Notch_Credential.png)
-- We then change Notch's password.
-![New_Password](New_Password.png)
-- Then we login as Notch.
-![Notch](Notch.png)
-- Nothing useful were found so we will move on to the SSH.
-- We then SSH into the machine using `notch:8YsqfCTnvxAUeduzjNSXe22`
+- Using the credential recovered from the JAR, I authenticated to phpMyAdmin at `http://blocky.htb/phpmyadmin/` and gained access to the application database.  
+  ![PHPMyAdmin](PHPMyAdmin.png)  
+- Within phpMyAdmin we found Notch's credentials.  
+  ![Notch_Credential](Notch_Credential.png)  
+- I updated Notch's password in the database and verified the new credentials by logging in as Notch.  
+  ![New_Password](New_Password.png)  
+  ![Notch](Notch.png)  
+- The WordPress instance did not yield further privilege escalation, so we shifted focus to system access via SSH. Using the recovered credentials: `notch:8YsqfCTnvxAUeduzjNSXe22`
+- I established an SSH session to the target and obtained the user flag.  
 ![SSH](SSH.png)
-- We then got the user flag.
 
 ## Privilege Escalation  
-- Running `sudo -l` showed that `notch` have sudo privileges.
-![SUDO](SUDO.png)
-- We then run the command `sudo su -` to change the user to root.
-![Root](Root.png)
-- We then capture the root flag.
+- We enumerated sudo privileges with `sudo -l` and found that the `notch` user had sudo rights.  
+![SUDO](SUDO.png)  
+- To escalate, I executed the permitted sudo command to obtain a root shell: `sudo su -`  
+![Root](Root.png)  
+- After escalation we captured the root flag.
