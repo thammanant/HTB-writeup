@@ -3,7 +3,7 @@
 
 ## Reconnaissance  
 - I began with a full TCP port scan including service/version detection and OS fingerprinting:  
-  `nmap -A -T4 -p- 10.10.10.37`  
+  `nmap -A -T4 -p- -Pn 10.10.11.116`  
   ![Nmap_Scan](Nmap_Scan.png)  
 - The scan revealed the following open ports:  
   - **21** — FTP  
