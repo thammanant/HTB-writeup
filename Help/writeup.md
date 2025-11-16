@@ -13,8 +13,7 @@
 
 ## Scanning & Enumeration  
 - We ran Vhost enumeration using  
-  `ffuf -u http://help.htb -H "Host: FUZZ.help.htb" -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-20000.txt -mc all -ac`,  
-  but nothing was found.
+  `ffuf -u http://help.htb -H "Host: FUZZ.help.htb" -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-20000.txt -mc all -ac`, but nothing was found.
 - Next, we used `dirsearch` on both port 80 and 3000:  
   ![Dirsearch_Scan1](Dirsearch_Scan1.png)  
   ![Dirsearch_Scan2](Dirsearch_Scan2.png)  
