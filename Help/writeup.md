@@ -32,7 +32,7 @@
   ![Failed](Failed.png)
 - We shifted our focus to port 3000.
 - After tweaking the request, we fired off a test GraphQL query.  
-  ![QueryPOC](QueryPOC.png)
+  ![QueryPoc](QueryPoc.png)
 - This confirmed that the API endpoint was active and responding.
 - We then used an introspection query:  
   `{
