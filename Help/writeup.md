@@ -6,33 +6,20 @@
   `nmap -A -T4 -p- 10.10.10.121`  
   ![Nmap_Scan](Nmap_Scan.png)  
 - The scan revealed the following open ports:  
-  - **21** — FTP  
   - **22** — SSH  
   - **80** — HTTP  
-  - **25565** — Minecraft  
+  - **3000** — HTTP  
 - I added `Help.htb` to `/etc/hosts` for proper hostname resolution.
 
 ## Scanning & Enumeration  
-- While reviewing the website we observed the author name **Notch** and recorded it as an intelligence lead.  
-- I performed a directory brute-force using `dirsearch`: `dirsearch -u http://blocky.htb`  
-  ![Dirsearch_Scan](Dirsearch_Scan.png)  
-- The `plugins` directory contained two JAR files.  
-  ![Plugin](Plugin.png)  
-- We extracted the JAR for inspection: `jar xf myfile.jar`  
-  ![Extract](Extract.png)  
-- In the extracted tree, under `/com/myfirstplugin`, I disassembled `BlockyCore.class` using `javap -c BlockyCore.class` and recovered embedded credentials.  
-  ![SQLPASS](SQLPASS.png)
-
-- We identified that the site is running WordPress and executed a WordPress enumeration scan:  
-  `wpscan --url blocky.htb`  
-  ![WP_Scan1](WP_Scan1.png)  
-  ![WP_Scan2](WP_Scan2.png)  
-  ![WP_Scan3](WP_Scan3.png)  
-- The WordPress scan did not return any actionable findings.
-
-- We then enumerated virtual hosts using `ffuf`:  
-  `ffuf -u http://blocky.htb -H "Host: FUZZ.blocky.htb" -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-20000.txt -mc all -ac`  
-- No additional virtual hosts were discovered.
+- I run the Vhost enumeratoin with `ffuf -u http://help.htb -H "Host: FUZZ.help.htb" -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-20000.txt -mc all -ac`, but nothing was founded.
+- I then run `dirsearch` on both port 80 and 3000
+  ![Dirsearch_Scan1](Dirsearch_Scan1.png)
+  ![Dirsearch_Scan2](Dirsearch_Scan2.png)
+- Visiting `http://htb.help/support/` found a website using `HelpDeskZ`.
+  ![HelpDeskZ](HelpDeskZ.png)
+- Visiting `http://htb.help:3000` found the message for user `Shiv`.
+  ![Message](Message.png)
 
 ## Exploitation  
 - Using the credential recovered from the JAR, I authenticated to phpMyAdmin at `http://blocky.htb/phpmyadmin/` and gained access to the application database.  
