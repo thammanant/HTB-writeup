@@ -20,22 +20,27 @@
   ![HelpDeskZ](HelpDeskZ.png)
 - Visiting `http://htb.help:3000` found the message for user `Shiv`.
   ![Message](Message.png)
+- visiting `http://help.htb:3000/graphql/` shows `GET query missing.`.
+- I then modify the request and sent a query.
+  ![QueryPOC](QueryPOC.png)
+- This confirm the API Endpoint.
+- I then change the query to `{
+  "query": "query IntrospectionQuery { __schema { queryType { name fields { name type { name } } } mutationType { name fields { name type { name } } } types { name fields { name type { name kind } } } } }"
+}`, This show  everything about its internal structure and the data it can handle.
+- We found data type User with username and password field.
+  ![API](API.png)
+- I then change the query to `{
+  "query": "query { user { username password } }"
+}`.
+  ![Helpme](Helpme.png)
+- We then put the password to crackstation and options helme's credentials.
+  ![Helpme_Password](Helpme_Password.png)
+- Using this credential we logged in to HelpDeskZ.
+  ![Login](Login.png)
+- 
 
 ## Exploitation  
-- Using the credential recovered from the JAR, I authenticated to phpMyAdmin at `http://blocky.htb/phpmyadmin/` and gained access to the application database.  
-  ![PHPMyAdmin](PHPMyAdmin.png)  
-- Within phpMyAdmin we found Notch's credentials.  
-  ![Notch_Credential](Notch_Credential.png)  
-- I updated Notch's password in the database and verified the new credentials by logging in as Notch.  
-  ![New_Password](New_Password.png)  
-  ![Notch](Notch.png)  
-- The WordPress instance did not yield further privilege escalation, so we shifted focus to system access via SSH. Using the recovered credentials: `notch:8YsqfCTnvxAUeduzjNSXe22`
-- I established an SSH session to the target and obtained the user flag.  
-![SSH](SSH.png)
+
 
 ## Privilege Escalation  
-- We enumerated sudo privileges with `sudo -l` and found that the `notch` user had sudo rights.  
-![SUDO](SUDO.png)  
-- To escalate, I executed the permitted sudo command to obtain a root shell: `sudo su -`  
-![Root](Root.png)  
-- After escalation we captured the root flag.
+
