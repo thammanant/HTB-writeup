@@ -5,42 +5,82 @@
 - I began with a full TCP port scan including service/version detection and OS fingerprinting:  
   `nmap -A -T4 -p- 10.10.10.121`  
   ![Nmap_Scan](Nmap_Scan.png)  
-- The scan revealed the following open ports:  
+- The scan revealed three open ports:  
   - **22** — SSH  
   - **80** — HTTP  
   - **3000** — HTTP  
-- I added `Help.htb` to `/etc/hosts` for proper hostname resolution.
+- We added `Help.htb` to `/etc/hosts` for proper hostname resolution.
 
 ## Scanning & Enumeration  
-- I run the Vhost enumeratoin with `ffuf -u http://help.htb -H "Host: FUZZ.help.htb" -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-20000.txt -mc all -ac`, but nothing was founded.
-- I then run `dirsearch` on both port 80 and 3000
-  ![Dirsearch_Scan1](Dirsearch_Scan1.png)
-  ![Dirsearch_Scan2](Dirsearch_Scan2.png)
-- Visiting `http://htb.help/support/` found a website using `HelpDeskZ`.
+- We ran Vhost enumeration using  
+  `ffuf -u http://help.htb -H "Host: FUZZ.help.htb" -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-20000.txt -mc all -ac`,  
+  but nothing was found.
+- Next, we used `dirsearch` on both port 80 and 3000:  
+  ![Dirsearch_Scan1](Dirsearch_Scan1.png)  
+  ![Dirsearch_Scan2](Dirsearch_Scan2.png)  
+  ![Dirsearch_Scan3](Dirsearch_Scan3.png)
+- Visiting `http://htb.help/support/` revealed a site using `HelpDeskZ`.  
   ![HelpDeskZ](HelpDeskZ.png)
-- Visiting `http://htb.help:3000` found the message for user `Shiv`.
+- Visiting `http://help.htb/support/README.md` confirmed it was running `HelpDeskZ` version 1.0.2.
+- Heading over to `http://htb.help:3000`, we discovered a message for user `Shiv`.  
   ![Message](Message.png)
-- visiting `http://help.htb:3000/graphql/` shows `GET query missing.`.
-- I then modify the request and sent a query.
-  ![QueryPOC](QueryPOC.png)
-- This confirm the API Endpoint.
-- I then change the query to `{
-  "query": "query IntrospectionQuery { __schema { queryType { name fields { name type { name } } } mutationType { name fields { name type { name } } } types { name fields { name type { name kind } } } } }"
-}`, This show  everything about its internal structure and the data it can handle.
-- We found data type User with username and password field.
-  ![API](API.png)
-- I then change the query to `{
-  "query": "query { user { username password } }"
-}`.
-  ![Helpme](Helpme.png)
-- We then put the password to crackstation and options helme's credentials.
-  ![Helpme_Password](Helpme_Password.png)
-- Using this credential we logged in to HelpDeskZ.
-  ![Login](Login.png)
-- 
+- Checking `http://help.htb:3000/graphql/` showed `GET query missing.`—a solid hint toward a GraphQL API.
 
 ## Exploitation  
-
+- We looked up CVEs for `HelpdeskZ 1.0.2` and found two relevant vulnerabilities.  
+  ![CVE](CVE.png)
+- We attempted the first exploit (Arbitrary File Upload) but it failed.  
+  ![Failed](Failed.png)
+- We shifted our focus to port 3000.
+- After tweaking the request, we fired off a test GraphQL query.  
+  ![QueryPOC](QueryPOC.png)
+- This confirmed that the API endpoint was active and responding.
+- We then used an introspection query:  
+  `{
+  "query": "query IntrospectionQuery { __schema { queryType { name fields { name type { name } } } mutationType { name fields { name type { name } } } types { name fields { name type { name kind } } } } }"
+}`  
+  This gave us complete visibility into the internal schema.
+- We noticed a `User` data type with `username` and `password` fields.  
+  ![API](API.png)
+- We updated the query to extract the credentials:  
+  `{
+  "query": "query { user { username password } }"
+}`  
+  ![Helpme](Helpme.png)
+- We submitted the password to CrackStation and successfully recovered Helme’s password.  
+  ![Helpme_Password](Helpme_Password.png)
+- With these credentials, we logged into HelpDeskZ.  
+  ![Login](Login.png)
+- Now authenticated, we moved on to the second exploit.
+- After reviewing the vulnerability details, we learned we needed to log in and create a ticket with an attachment.  
+  ![POC1](POC1.png)
+- The attachment download URL was:  
+  `http://help.htb/support/?v=view_tickets&action=ticket&param[]=4&param[]=attachment&param[]=1&param[]=6`  
+  We tested for SQLi using:  
+  - `...6 and 1=2-- -`  
+  - `...6 and 1=1-- -`  
+  The first returned an error, while the second worked—confirming SQL injection.  
+  ![POC2](POC2.png)
+- We saved the request to `req.txt`.  
+  ![POC3](POC3.png)
+- Running sqlmap with `sqlmap -r req.txt --batch` gave us full database access.  
+  ![POC4](POC4.png)  
+  ![POC5](POC5.png)  
+  ![POC6](POC6.png)
+- We eventually recovered the admin credentials.  
+  ![Credential](Credential.png)
+- Trying SSH with each user, we finally got in as user `help`.  
+  ![HELP](HELP.png)
+- We captured the user flag.
 
 ## Privilege Escalation  
-
+- Running `sudo -l` confirmed we had no sudo permissions.
+- Checking `/var/mail`, we found a mail addressed to help.  
+  ![Mail](Mail.png)
+- The mail was an automated Cron email, but still executed with help’s permissions.
+- After several attempts to find misconfigurations, we began considering kernel exploits as a last resort.
+- Running `uname -a` revealed the kernel version: Linux 4.4.0-116-generic.
+- We found a suitable local privilege escalation: `CVE-2017-16995`.
+- We copied the exploit from ExploitDB, compiled it, and executed it—gaining root access.  
+  ![Root](Root.png)
+- We captured the root flag.
