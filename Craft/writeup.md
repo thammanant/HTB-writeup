@@ -48,7 +48,7 @@
 - This revealed several user credentials.
   ![Credentials](Credentials.png)
 - I attempted to SSH into the machine but failed. I then used these credentials to log in to `gogs.craft.htb` and successfully authenticated using `gilfoyle:ZEU3N8WNM2rh4T`.
-  ![Gilfoyle_Account](Gilfoyle_Accunt.png)
+  ![Gilfoyle_Account](Gilfoyle_Account.png)
 - We found Gilfoyle's private repository named `craft-infra`.
   ![Craft_Infra](Craft_Infra.png)
 - Inside the `.ssh` folder, we found both public and private SSH keys.
