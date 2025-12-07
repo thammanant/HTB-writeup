@@ -39,7 +39,6 @@
 - We successfully obtained a reverse shell as user `xwiki`.
   ![CVE3](CVE3.png)
 - Reading `/usr/lib/xwiki/WEB-INF/hibernate.cfg.xml`, we found database connection credentials.
-  ![DB_Credential](DB_Credential.png)
 - We read the file `/etc/passwd` and identified a user named `oliver`.
   ![PASSWD](PASSWD.png)
 - I used the database password to attempt SSH login as user `oliver`, and the authentication was successful.
