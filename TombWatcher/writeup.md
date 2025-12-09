@@ -83,7 +83,7 @@
   ![PFX](PFX.png)
 - We pivoted to a privilege escalation attack known as **ESC3** (Certificate Request Agent). This is a two-stage method where the first stage uses a low-privileged user's credentials to request a certificate that grants the power to request certificates on behalf of others.
   ![Cert2](Cert2.png)
-- Using the Agent Certificate from the previous stage, we impersonated the Certificate Authority (CA) to issue the final logon certificate for the Administrator.
+- Using the Agent Certificate obtained in the previous stage, I then submitted a new certificate request to the CA, specifying the target Administrator in the Subject Alternative Name (SAN).
   ![Cert3](Cert3.png)
 - Finally, we used the resulting PFX file to authenticate as Administrator.
   ![TGT](TGT.png)
