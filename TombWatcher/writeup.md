@@ -1,6 +1,6 @@
 # TombWatcher Writeup - by Thammanant Thamtaranon
 
-**TombWatcher** is an medium-difficulty Windows machine hosted on Hack The Box.
+**TombWatcher** is a medium-difficulty Windows machine hosted on Hack The Box.
 
 ## Reconnaissance
 - I began with a full TCP port scan, including service/version detection and OS fingerprinting:
@@ -11,76 +11,82 @@
   - **53** — DNS (Simple DNS Plus)
   - **80** — HTTP (Microsoft IIS httpd 10.0)
   - **88** — Kerberos (Microsoft Windows Kerberos)
-  - **135** — MSRPC (Microsoft Windows RPC)
-  - **139** — NetBIOS-SSN
   - **389** — LDAP (Microsoft Windows Active Directory LDAP)
   - **445** — Microsoft-DS (SMB)
-  - **464** — kpasswd
-  - **593** — RPC over HTTP (Microsoft Windows RPC over HTTP 1.0)
-  - **636** — LDAPS (SSL/LDAP)
-  - **3268** — Global Catalog LDAP
-  - **3269** — Global Catalog LDAPS
   - **5985** — WinRM (Microsoft HTTPAPI httpd 2.0)
-  - **9389** — AD Web Services (.NET Message Framing)
-  - **49666 - 49720** — RPC High Ports (Microsoft Windows RPC)
+  - **3268/3269** — Global Catalog LDAP/LDAPS
+  - **49666 - 49720** — RPC High Ports
 - I added `tombwatcher.htb` and `dc01.tombwatcher.htb` to `/etc/hosts` for proper hostname resolution.
 
 ## Scanning & Enumeration
-- We ran `dirsearch` on both `tombwatcher.htb` and `dc01.tombwatcher.htb`, but nothing of interesting was founded.
-- I then use `nxc` with the given username and password on smb. However, after enumerated nothing of use was founded.
+- We ran `dirsearch` on both `tombwatcher.htb` and `dc01.tombwatcher.htb`, but nothing of interest was found.
+- I then used `nxc` (NetExec) with the given username and password on SMB. After enumeration, nothing useful was found.
   ![NXC_SMB](NXC_SMB.png)
-- We then use `rpcclient` to find more information.
+- We then used `rpcclient` to gather more information.
   ![MSRPC](MSRPC.png)
-- We found user `Alfred`, `sam`, and `john`.
+- We found three users: `Alfred`, `Sam`, and `John`.
 
 ## Exploitation
-- We use `bloodhound-python` to map the relationships.
+- I used `bloodhound-python` to map the relationships in the domain.
   ![BloodHound](BloodHound.png)
-- We founded that user `henry` have `writeSPN` on user `alfred`. This allows us to perform `Targeted Kerberoasting`.
+- We found that user **Henry** has the **WriteSPN** right over user **Alfred**. This allows us to perform **Targeted Kerberoasting**.
   ![Outbound](Outbound.png)
-- Normally, you can only Kerberoast users who already have a "Service Principal Name" (SPN). Alfred doesn't have one, so we can't roast him yet.
-- Since Henry has WriteSPN, we can force an SPN onto Alfred's account (e.g., assign him a fake service like HTTP/test).
-- Resulting in `Alfred becomes a "Service Account." Now we request a TGS ticket for him, which will be encrypted with his password. Then we can crack that ticket to get his cleartext password.
-- First, set the clock to match the server clock. Kerberos includes a timestamp in every "ticket" request to prevent hackers from capturing old tickets and reusing them later (Replay Attacks). If your clock and the server's clock differ by more than 5 minutes, the server automatically rejects you with the error `KRB_AP_ERR_SKEW`.
+- **Targeted Kerberoasting Logic:** Normally, we can only Kerberoast users who already have an SPN. Alfred does not have one. Since Henry has `WriteSPN`, we can force a fake SPN onto Alfred's account (e.g., `HTTP/test`). Alfred now becomes a "Service Account," allowing us to request a TGS ticket encrypted with his password, which we can then crack offline.
+- First, I set my clock to match the server clock to prevent the `KRB_AP_ERR_SKEW` error.
   ![Set_Clock](Set_Clock.png)
-- Next, inject a fake SPN into Alfred's account.
+- Next, I injected a fake SPN into Alfred's account.
   ![WriteSPN](WriteSPN.png)
-- Then, we request the service from user Alfred.
+- Then, we requested the service from user Alfred.
   ![Get_UserSPN](Get_UserSPN.png)
-- Finally, we crack the hash, which will resulting in getting alred's password.
+- Finally, we cracked the hash, resulting in Alfred's cleartext password.
   ![Alfred_Password](Alfred_Password.png)
-- Going back to bloodhound relationships, we founded that user Alfred have `AddSelf` to `INFRASTRUCTURE`. Which means the user has the right to add themselves to a specific group (Infrastructure).
+- Going back to BloodHound, we found that user **Alfred** has the **AddSelf** right to the **INFRASTRUCTURE** group. This means Alfred has the right to add himself to that group.
   ![Outbound2](Outbound2.png)
-- We then add Alfred to Infrastructure group.
+- I then added Alfred to the Infrastructure group.
   ![AddSelf](AddSelf.png)
-- Now, back to the relationships map. The Infrastructure group have `ReadGMSAPassword` to `ANSIBLE_DEV$`. Group Managed Service Accounts (gMSA) are used by servers to run automated tasks (like Ansible). Because they are automated, their passwords are managed by Windows and are incredibly long and complex. We have permission to read that password.
+- Now, the **INFRASTRUCTURE** group has **ReadGMSAPassword** on `ANSIBLE_DEV$`. Group Managed Service Accounts (gMSA) have complex, Windows-managed passwords, and we now have permission to read that password.
   ![Outbound3](Outbound3.png)
   ![Hash](Hash.png)
-- Now that we got a hash password of `ANSIBLE_DEV$`, we will be using technique called Pass-The-Hash. Pass the Hash (PtH) is a hacking technique that allows you to log into a system using a user's password hash instead of their cleartext password.
-- From the relationships map, `ANSIBLE_DEV$` have `ForceChangePassword` to user `sam`. So we can change user Sam's password.
+- Now that we had the hash password of `ANSIBLE_DEV$`, we used the **Pass-The-Hash (PtH)** technique.
+- From the relationships map, `ANSIBLE_DEV$` has **ForceChangePassword** rights on user **Sam**. I used this right to set a new password for Sam.
   ![Outbound4](Outbound4.png)
   ![ForceChangePassword](ForceChangePassword.png)
-- Since User `Sam` have `WriteOwner` to User `John`. The permission WriteOwner is extremely powerful because the Owner of an object can always change the permissions on that object. Meaning we can use WriteOwner to make Sam the owner of John's account.
+- Since User **Sam** has **WriteOwner** on User **John**, this permission is extremely powerful because the Owner of an object can always modify its permissions. We used `WriteOwner` to make Sam the owner of John's account.
   ![Outbound5](Outbound5.png)
   ![WriteOwner](WriteOwner.png)
-- Now that Sam is the owner, he grants himself the right to modify John.
+- With Sam as the owner, we granted him **GenericAll** rights to modify John's account.
   ![GenericAll](GenericAll.png)
-- Now that Sam has full control, force the password change.
+- Now that Sam had full control, I forced a password change on John's account.
   ![Set_Password](Set_Password.png)
-- We then run `nxc` on winrm and able to login with changed password.
+- We ran `nxc` against WinRM and were able to log in with the changed password.
   ![NXC_WinRM](NXC_WinRM.png)
-- We then capture the user flag.
+- We captured the user flag.
 
 ## Privilege Escalation
-- From the relationships map, user `John` have `GenericAll` on the `ADCS (Active Directory Certificate Services)`. This is a vulnerability known as ESC7, It means John has full control over the Certificate Authority (CA). He can reconfigure it to make himself an "Officer" (manager), which allows him to issue certificates for anyone, including the Administrator.
+- From the relationships map, user **John** has **GenericAll** permissions on the Organizational Unit (OU) named **ADCS**. This automatically inherits Full Control over every User, Group, and Computer inside that OU.
   ![Outbound6](Outbound6.png)
-- First, we upload Certify.exe to the machine using `Evil-WinRm`.
-- Second, we 
-- 
-
-- 
-
-
-
-
-
+- I connected as John using `Evil-WinRM`.
+  ![Evil_WinRM](Evil_WinRM.png)
+- I checked the contents of the ADCS OU, but unfortunately, nothing was currently inside.
+  ![OU](OU.png)
+- Leveraging our **GenericAll** rights on the ADCS OU, we attempted to restore a deleted high-privilege object and found a user object named `cert_admin`.
+  ![Cert_Admin](Cert_Admin.png)
+- I used the `Restore-ADObject` cmdlet to restore the object. After restoration, I set a new password and enabled the account. However, the restored account's privileges were only those of a Domain User.
+  ![Restored](Restored.png)
+- We then ran `certipy-ad` as `cert_admin`.
+  ![CERTIPY](CERTIPY.png)
+- We found **ESC15** (Enrollment Agent Abuse with Template Constraints), an advanced ADCS attack (CVE-2024-49019) that allows an attacker to bypass constraints on a target certificate template by using an Enrollment Agent certificate.
+  ![ESC15](ESC15.png)
+- First, we requested the Administrator's Certificate. This used the Enrollment Agent's privilege to bypass the constraints of the WebServer template.
+  ![Cert1](Cert1.png)
+- We attempted to authenticate with the resulting PFX file, but we failed.
+  ![PFX](PFX.png)
+- We pivoted to a privilege escalation attack known as **ESC3** (Certificate Request Agent). This is a two-stage method where the first stage uses a low-privileged user's credentials to request a certificate that grants the power to request certificates on behalf of others.
+  ![Cert2](Cert2.png)
+- Using the Agent Certificate from the previous stage, we impersonated the Certificate Authority (CA) to issue the final logon certificate for the Administrator.
+  ![Cert3](Cert3.png)
+- Finally, we used the resulting PFX file to authenticate as Administrator.
+  ![TGT](TGT.png)
+- We successfully obtained the Administrator hash and authenticated into the machine using Pass-The-Hash.
+  ![Administrator](Administrator.png)
+- We then captured the root flag.
