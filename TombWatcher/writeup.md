@@ -30,7 +30,7 @@
 - I used `bloodhound-python` to map the relationships in the domain.
   ![BloodHound](BloodHound.png)
 - We found that user **Henry** has the **WriteSPN** right over user **Alfred**. This allows us to perform **Targeted Kerberoasting**.
-  ![Outbound](Outbound.png)
+  ![Outbound1](Outbound1.png)
 - **Targeted Kerberoasting Logic:** Normally, we can only Kerberoast users who already have an SPN. Alfred does not have one. Since Henry has `WriteSPN`, we can force a fake SPN onto Alfred's account (e.g., `HTTP/test`). Alfred now becomes a "Service Account," allowing us to request a TGS ticket encrypted with his password, which we can then crack offline.
 - First, I set my clock to match the server clock to prevent the `KRB_AP_ERR_SKEW` error.
   ![Set_Clock](Set_Clock.png)
