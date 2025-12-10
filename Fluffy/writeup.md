@@ -73,7 +73,7 @@
 - **ESC16 Exploitation Steps:** Leveraging the `ca_svc` account's privileges, I proceeded with the full ESC16 attack chain. I used `certipy-ad` (as `ca_svc`) to update the `userPrincipalName` of the **ca_svc** account itself to `administrator`. This modification tricks the Certificate Authority (CA) into believing `ca_svc` is the Administrator during certificate operations.
   ![ESC16_1](ESC16_1.png)
 - To exploit this new identity, we executed a **Shadow Credentials** attack again on the `ca_svc` account. This allowed us to authenticate as `ca_svc` but, due to the modified UPN, request a User certificate for the **Administrator**.
-  ![ESC16_2](ESC16_2.jpg)
+  ![ESC16_2](ESC16_2.png)
 - We then successfully authenticated as the Administrator using the newly obtained certificate (saved as `administrator.pfx`) to retrieve the Administrator's NTLM hash.
   ![ESC16_3](ESC16_3.png)
 - After receiving the Administrator's hash, I used `Evil-WinRM` to connect to the machine.
