@@ -68,7 +68,7 @@
 - Now that we had the `ca_svc` hash, we used `certipy-ad` to scan the domain for Certificate Authorities and Templates to locate misconfigurations (ESC vulnerabilities).
   ![CERTIPY](CERTIPY.png)
 - Certipy identified this vulnerability as **ESC16 (CVE-2024-49019)**. This attack specifically targets misconfigured **Access Control Lists (ACLs)** on the **Certificate Authority (CA) object** in Active Directory.
-  ![ESC16](ESC16.png)
+  ![ESC16](ESC16.png)
 - **ESC16 Logic:** The vulnerability exists because the `ca_svc` account, through its **Cert Publishers** membership, has privileges (like `WriteDACL`) over the CA object itself. This allows us to modify the CA's permissions to map a low-privileged account to a high-privileged one, such as **Administrator**.
 - **ESC16 Exploitation Steps:** Leveraging the `ca_svc` account's privileges, I proceeded with the full ESC16 attack chain. I used `certipy-ad` (as `ca_svc`) to update the `userPrincipalName` of the **ca_svc** account itself to `administrator`. This modification tricks the Certificate Authority (CA) into believing `ca_svc` is the Administrator during certificate operations.
   ![ESC16_1](ESC16_1.png)
@@ -78,4 +78,4 @@
   ![ESC16_3](ESC16_3.png)
 - After receiving the Administrator's hash, I used `Evil-WinRM` to connect to the machine.
   ![ESC16_4](ESC16_4.png)
-- We captured the both root flag and user flag (winrm_svc).
+- We captured both the root flag and the user flag (from the winrm_svc directory).
