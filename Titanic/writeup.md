@@ -30,9 +30,9 @@
 - This file leaked a potential password:
   - **MYSQL_ROOT_PASSWORD:** `MySQLP@$$w0rd!`
 - Next, I analyzed the **flask-app** repository, which appears to be the source code for the main booking application. I reviewed `app.py` for vulnerabilities.
-  ![Web_Dev6](Web_Dev6.jpg)
+  ![Web_Dev6](Web_Dev6.png)
 - I identified a critical **Path Traversal / Local File Inclusion (LFI)** vulnerability in the `download_ticket` function.
-  ![Web_Dev7](Web_Dev7.jpg)
+  ![Web_Dev7](Web_Dev7.png)
 - **Vulnerability Logic:**
   - The application defines a route `/download` that takes a `ticket` parameter.
   - It constructs the file path using `os.path.join(TICKETS_DIR, ticket)` without sanitizing the input.
