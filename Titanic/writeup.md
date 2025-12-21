@@ -17,7 +17,7 @@
 
 ## Scanning & Enumeration
 - Visiting the main website `http://titanic.htb` presented a booking page for a "luxurious ship trip experience."
-  ![Web_Main1](Web_Main1.jpg)
+  ![Web_Main1](Web_Main1.png)
 - I proceeded to enumerate subdomains (Virtual Hosts) using `ffuf` to find any hidden applications.
   ![VHost](VHost.png)
 - The scan discovered a valid subdomain: **dev.titanic.htb**. I added this to my `/etc/hosts` file as well.
