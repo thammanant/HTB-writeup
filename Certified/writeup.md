@@ -42,7 +42,7 @@
 - Moving to Step 2, I abused the **GenericWrite** permission on **MANAGEMENT_SVC** using `certipy-ad` to perform a Shadow Credentials attack. This allowed us to retrieve the NTLM hash for the service account.
   ![Phase2](Phase2.png)
 - I verified this access using **Evil-WinRM**.
-  ![Managment_SVC](Managment_SVC.png)
+  ![Management_SVC](Management_SVC.png)
 - I successfully captured the **user flag** from the user's desktop.
 - For Step 3, I used `bloodyAD` and the compromised Management_SVC account to force reset the password for the user **CA_OPERATOR**.
   ![Phase3](Phase3.png)
