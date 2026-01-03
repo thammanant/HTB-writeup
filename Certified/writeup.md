@@ -6,15 +6,9 @@
 
 ## Reconnaissance
 - I began with a full TCP port scan to identify open services and the operating system.
+- The scan revealed the standard suite of ports for a **Domain Controller**
   ![Nmap_Scan1](Nmap_Scan1.png)
   ![Nmap_Scan2](Nmap_Scan2.png)
-- The scan revealed the standard suite of ports for a **Domain Controller**:
-  - **53** — DNS (Simple DNS Plus)
-  - **88** — Kerberos
-  - **135/139/445** — RPC/SMB
-  - **389/636/3268** — LDAP/LDAPS (Domain: certified.htb)
-  - **593** — RPC over HTTP
-  - **80/443** — HTTP/HTTPS (Microsoft IIS)
 - I added **dc01.certified.htb** and **certified.htb** to my `/etc/hosts` file.
 
 ---
