@@ -42,8 +42,12 @@
   ![MSSQL3](MSSQL3.png)
 - I downloaded the backup file to my local machine using `wget`.
   ![Backup](Backup.png)
-- analyzing the backup, specifically within `.old-conf.xml`, I found hardcoded credentials for the user **raven**.
+- Analyzing the backup, specifically within `.old-conf.xml`, I found hardcoded credentials for the user **raven**.
   ![Raven_Credential](Raven_Credential.png)
+
+---
+
+## Exploitation
 - I verified Raven's credentials using `NetExec` against SMB and WinRM.
   ![NXC_SMB_Raven](NXC_SMB_Raven.png)
   ![NXC_WinRM_Raven](NXC_WinRM_Raven.png)
@@ -54,7 +58,7 @@
 
 ---
 
-## Exploitation (AD CS Abuse)
+## Privilege Escalation
 - I ran `certipy-ad` to enumerate Active Directory Certificate Services (AD CS) vulnerabilities and identified that the domain is vulnerable to **ESC7**.
   ![Certipy1](Certipy1.png)
   ![Certipy2](Certipy2.png)
@@ -81,10 +85,6 @@
 - With the request approved, I retrieved the issued certificate for the Administrator.
   ![ESC7_2](ESC7_2.png)
 - The certificate was saved locally as `administrator.pfx`.
-
----
-
-## Privilege Escalation
 - I used the obtained PFX certificate to authenticate to the Domain Controller via PKINIT. This allowed me to retrieve the **Administrator's NTLM hash**.
 - Finally, I used **Evil-WinRM** with the Administrator's hash to log in to the machine.
   ![Admin](Admin.png)
