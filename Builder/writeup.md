@@ -33,7 +33,7 @@
 - I saved this hash to a file and used **John the Ripper** with the `rockyou.txt` wordlist. The password was successfully cracked as `princess`.
   ![Jennifer_Credential](Jennifer_Credential.png)
 - With the valid credentials `jennifer` : `princess`, I accessed the Jenkins login page.
-  ![Login1](Login1.jpg)
+  ![Login1](Login1.png)
 - I successfully logged into the dashboard.
   ![Login2](Login2.png)
 - To achieve Remote Code Execution (RCE), I created a new **Pipeline** job. In the pipeline script definition, I injected a Groovy script to spawn a reverse shell.
