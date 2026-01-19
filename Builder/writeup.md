@@ -56,13 +56,13 @@
 
 ## Privilege Escalation
 - I began enumerating the file system and found a `credentials.xml` file in `/var/jenkins_home/`. This file contained an encrypted **SSH private key** for the **root** user.
-  ![Root_Key](Root_Key.jpg)
+  ![Root_Key](Root_Key.png)
 - Since I had access to the Jenkins script console (via the pipeline), I could use Jenkins' internal decryption method (`hudson.util.Secret.decrypt`) to recover the plaintext key. I created a new pipeline job for this purpose.
   ![SSH_Key1](SSH_Key1.png)
 - Because the script runs in a sandbox, I had to manually approve the signature in the **"In-process Script Approval"** section of the dashboard.
   ![Approved](Approved.png)
 - After approval, I ran the build again. The console output revealed the decrypted **RSA private key**.
-  ![SSH_Key2](SSH_Key2.jpg)
+  ![SSH_Key2](SSH_Key2.png)
 - I saved the key to a file named `id_rsa` and set the correct permissions (`chmod 600`).
 - Finally, I used the key to SSH into the machine as **root** and captured the root flag.
   ![Root](Root.png)
