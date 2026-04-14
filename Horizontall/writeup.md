@@ -18,7 +18,7 @@
 - Digging deeper, we inspected the source code and investigated the JavaScript files loaded by the page. 
   ![Request.png](Request.png)
 - Among the JavaScript files, we found hardcoded references to a backend API virtual host: `http://api-prod.horizontall.htb/reviews`.
-  ![VHost.png](Vhost.png)
+  ![VHost.png](VHost.png)
 - We immediately added `api-prod.horizontall.htb` to our `/etc/hosts` file to access this new endpoint.
 - Visiting `/reviews` on the new virtual host returned a JSON response containing user reviews and names, which we noted down for potential username enumeration.
   ![Reviews.png](Reviews.png)
