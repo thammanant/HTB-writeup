@@ -33,7 +33,7 @@
   
 ---
 
-## Exploitation (Initial Access)
+## Exploitation
 - **Understanding the Vulnerabilities:**
   - **CVE-2019-18818:** This is a logic flaw in Strapi's password reset mechanism. The application improperly validates the reset `code` parameter. If an attacker submits an empty JSON object (`{}`) instead of a valid token string, the backend check bypasses the validation, allowing an unauthenticated user to reset the password of any known account.
   - **CVE-2019-19609:** Once authenticated as an administrator, this vulnerability allows for command injection. The Strapi plugin installer endpoint insecurely passes the `plugin` parameter directly to a system shell execution function (`exec()`), leading to RCE.
