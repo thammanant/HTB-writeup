@@ -21,7 +21,7 @@
   
 ---
 
-## Exploitation (Initial Access)
+## Exploitation
 - We initially tested the login form for standard SQL injection, which failed. Recognizing that Node.js applications frequently use MongoDB, we pivoted to testing for NoSQL injection. Using a standard NoSQL authentication bypass payload successfully granted us access to the application dashboard.
   ![NoSQL.png](NoSQL.png)
   ![Main2.png](Main2.png)
