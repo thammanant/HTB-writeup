@@ -39,7 +39,7 @@
   ![Forge_JWT.png](Forge_JWT.png)
 - Sending a request to the private route API with the forged token successfully returned a response, confirming that the application now recognized us as an administrator.
   ![Valid_Forged_JWT.png](Valid_Forged_JWT.png)
-- Inspecting the retrieved source code (specifically `private.js`), I discovered an additional route at `/logs`. Analyzing the code revealed that it passes user input directly into a system command, leading to a command injection vulnerability.
+- Inspecting the retrieved source code specifically `private.js`, I discovered an additional route at `/logs`. Analyzing the code revealed that it passes user input directly into a system command, leading to a command injection vulnerability.
   ![Route.png](Route.png)
 - Sending a GET request to this path required a parameter. Suspecting command injection, I tested the parameter with the payload `;id` to terminate the expected command and inject my own.
   ![Route_Request.png](Route_Request.png)
@@ -63,12 +63,12 @@
   ![Internal_Services.png](Internal_Services.png)
 - Connecting to the MongoDB instance using the command-line client, I dumped the database and found a collection of bcrypt password hashes.
   ![Mongo.png](Mongo.png)
-- I saved the hashes locally to attempt offline cracking. Unfortunately, while I successfully cracked the password for `newuser` (`mypassword`), I could not crack the hash for `dasith` or `theadmin`. Attempting to use `newuser`'s password to elevate privileges failed.
+- I saved the hashes locally to attempt offline cracking. Unfortunately, while I successfully cracked the password for `newuser`:`mypassword`, I could not crack the hash for `dasith` or `theadmin`. Attempting to use `newuser`'s password to elevate privileges failed.
   ![Hashes.png](Hashes.png)
   ![Cracked.png](Cracked.png)
 - Pivoting back to standard Linux enumeration, I searched for files with the SUID bit set and found an interesting custom binary located at `/opt/count`.
   ![SUID.png](SUID.png)
-- Checking the `/opt` directory, I also found the source code (`code.c`) for the binary. Analyzing the C code revealed a critical logic flaw: the program executes as `root` (due to the SUID bit) while calculating file statistics, and only drops its privileges *after* it prompts the user to save the results.
+- Checking the `/opt` directory, I also found the source code `code.c` for the binary. Analyzing the C code revealed a critical logic flaw: the program executes as `root` due to the SUID bit while calculating file statistics, and only drops its privileges *after* it prompts the user to save the results.
   ![Code.png](Code.png)
 - If we tell the program to read a file that only `root` can access, the program successfully opens it because it hasn't dropped privileges yet. When it prompts us asking if we want to save the results, the process is paused. If we suspend the process in the background using `Ctrl+Z`, the file descriptor remains open. We can then navigate to `/proc/<PID>/fd/` and read the contents of the open file descriptor.
 - I ran the `/opt/count` binary against the `/root` directory to map out its contents, which revealed the existence of a `.viminfo` file.
