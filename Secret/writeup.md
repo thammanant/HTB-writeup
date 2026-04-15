@@ -34,7 +34,7 @@
 
 ---
 
-## Exploitation (Initial Access)
+## Exploitation
 - Utilizing a JWT manipulation tool, I forged a new token and changed the `name` parameter in the payload to `theadmin`.
   ![Forge_JWT.png](Forge_JWT.png)
 - Sending a request to the private route API with the forged token successfully returned a response, confirming that the application now recognized us as an administrator.
