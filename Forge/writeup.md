@@ -63,10 +63,10 @@
   4. The menu expects integer input (1-4) using `int()`.
   5. The entire program is wrapped in a `try-except` block. If an exception occurs, it triggers `pdb.post_mortem(e.__traceback__)`, dropping the user into an interactive debugging shell.
 - To exploit this, I executed the script with `sudo` in my primary SSH session. It started listening on a local port.
-  ![Root1.png](Root1.png)
 - I opened a second SSH session, connected to the local port using `nc localhost 35837`, and entered the secret password to reach the menu.
-  ![Root2.png](Root2.png)
 - When prompted to choose an option, I intentionally sent a non-integer character (`a`). This caused a `ValueError` exception on the host script when it attempted to convert the string to an integer.
 - Returning to my first SSH session, the exception had successfully triggered the `pdb` module, dropping me into an interactive `(Pdb)` shell running as root. 
 - From the `(Pdb)` prompt, I imported the `os` module and executed a system command to set the SUID bit on the bash binary: `import os; os.system("chmod +s /bin/bash")`.
 - After exiting the debugger, I confirmed the SUID bit was set with `ls -la /bin/bash`, executed `/bin/bash -p`, and successfully dropped into a high-privileged root shell to capture the `root.txt` flag.
+![Root1.png](Root1.png)
+![Root2.png](Root2.png)
