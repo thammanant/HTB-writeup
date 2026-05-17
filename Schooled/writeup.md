@@ -54,7 +54,7 @@
 - This revealed the necessary parameters: the manager ID was `25` and the course ID was `5`.
   ![Manager3.png](Manager3.png)
 - Having gathered all the required parameters, I executed the PoC exploit.
-- The exploit successfully elevated our teacher account to a manager role, packed a malicious ZIP file, and uploaded it to the server via the Moodle plugins installation feature. The default payload runs the `id` command, which confirmed we had execution as the `www` user.
+- The exploit successfully elevated our teacher account to a manager role, packed a malicious ZIP file, and uploaded it to the server via the Moodle plugins installation feature. The default payload runs the `whoami` command, which confirmed we had execution as the `www` user.
   ![Priv_Esc2.png](Priv_Esc2.png)
 - I modified the exploit command to execute a reverse shell back to our machine.
   ![Priv_Esc3.png](Priv_Esc3.png)
