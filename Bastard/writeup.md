@@ -41,8 +41,8 @@
 - Running the `systeminfo` command revealed the OS architecture and version (Windows Server 2008 R2), confirming that the system was a prime target for a token impersonation attack.
   ![SystemInfo.png](SystemInfo.png)
 - To exploit this, I transferred the `JuicyPotato.exe` binary from my attacker machine to the target machine.
-  ![JuicyPotato1.png](JuicyPotato1.png)
   ![JuicyPotato2.png](JuicyPotato2.png)
+  ![JuicyPotato1.png](JuicyPotato1.png)
 - Next, I created a custom reverse shell payload using `msfvenom`.
   ![Payload.png](Payload.png)
 - I executed JuicyPotato with the appropriate CLSID for the OS version, configuring it to launch my payload, and waited for the callback on my listener. You can find the necessary CLSIDs for Windows Server 2008 R2 [here](https://github.com/ohpe/juicy-potato/tree/master/CLSID/Windows_Server_2008_R2_Enterprise).
