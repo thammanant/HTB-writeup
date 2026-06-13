@@ -51,4 +51,4 @@
   1. **Take Ownership:** Because the previous owner had stripped the permissions, we first had to force ownership of the file over to our current execution context (`SYSTEM`). As confirmed by the success output, the file was now owned by our machine account (`WORKGROUP\CHATTERBOX$`).
   2. **Grant Permissions:** Now acting as the file's legal owner, I used the command `icacls root.txt /grant SYSTEM:F` to rewrite the ACL and explicitly grant the `SYSTEM` account Full Control (`F`) over the file.
 - With the permissions fully restored, we successfully read the file and captured the root flag.
-  ![Root_Flag_2.png](Root_Flag_2.png)
+  ![Root_Flag.png](Root_Flag.png)
