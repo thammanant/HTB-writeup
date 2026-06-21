@@ -24,7 +24,7 @@
 - The null authentication succeeded, but I could not list any shares.
   ![SMB.png](SMB.png)
 - Knowing null credentials worked, I tried enumerating LDAP using null credentials via `nxc` and successfully extracted numerous domain users, including `sebastien`, `lucinda`, `svc-alfresco`, `andy`, `mark`, and `santi`.
-  ![LDAP.jpg](LDAP.jpg)
+  ![LDAP.png](LDAP.png)
 
 ---
 
