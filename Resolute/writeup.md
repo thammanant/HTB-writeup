@@ -48,7 +48,7 @@
 - Looking at `melanie`'s privileges, we found `SeMachineAccountPrivilege`. This privilege allows standard domain users to add up to 10 computer accounts to the Active Directory domain.
   ![Priv.png](Priv.png)
 - Searching for privilege escalation vectors associated with this capability, we found a Medium blog post demonstrating a chain of **CVE-2021-42278** and **CVE-2021-42287** (often referred to as the **noPac** exploit) to gain `NT AUTHORITY\SYSTEM`.
-  * **CVE-2021-42278:** A vulnerability that allows an attacker to spoof the `SAMAccountName` of a domain controller by creating a machine account and renaming it to match a DC without the trailing `$` symbol.
+  * **CVE-2021-42278:** A vulnerability that allows an attacker to spoof the `sAMAccountName` of a domain controller by creating a machine account and renaming it to match a DC without the trailing `$` symbol.
   * **CVE-2021-42287:** A vulnerability in the Kerberos Key Distribution Center (KDC). When an attacker requests a Ticket Granting Service (TGS) ticket for a machine account that no longer exists (because we renamed it back), the KDC falls back to searching for the Domain Controller's account and mistakenly grants a ticket with Domain Admin privileges.
   ![SeMachineAccountPrivilege.png](SeMachineAccountPrivilege.png)
 - I then downloaded a Python Proof-of-Concept (PoC) from [Ridter/noPac on GitHub](https://github.com/Ridter/noPac/tree/main).
