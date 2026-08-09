@@ -70,7 +70,7 @@
   ![Bum_Cracked.png](Bum_Cracked.png)
 - Verifying `C.Bum`'s credentials against SMB, we found them valid and that `C.Bum` has **write** permission on the `Web` share. We were also able to download the user flag from `Users` → `C.Bum` → `Desktop`.
   ![SMB_Bum.png](SMB_Bum.png)
-- Because we can modify the `Web` share, we put a PHP web shell into the web root and triggered it through the site. Because `svc_apache` can't log in remotely (no WinRM), the webshell is what gives us our first interactive shell on the box — running as `svc_apache`, the account Apache executes under.
+- Because we can modify the `Web` share, we put a PHP web shell into the web root and triggered it through the site. Because `svc_apache` can't log in remotely (no WinRM), the webshell is what gives us our first interactive shell on the box.
   ![Web_Shell1.png](Web_Shell1.png)
   ![Web_Shell2.png](Web_Shell2.png)
 - After confirming the web shell executes, we set up Penelope on our machine to catch the reverse shell.
