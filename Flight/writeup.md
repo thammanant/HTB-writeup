@@ -117,7 +117,7 @@
   ![Internal_Web_shell2.png](Internal_Web_shell2.png)
 - With the web shell confirmed, we changed the command to a reverse shell and landed a session as the IIS application-pool identity.
   ![Apppool.png](Apppool.png)
-- Checking `defaultapppool`'s privileges, we found `SeImpersonatePrivilege` **enabled** (alongside `SeChangeNotifyPrivilege` and `SeCreateGlobalPrivilege`).
+- Checking `defaultapppool`'s privileges, we found `SeImpersonatePrivilege` **enabled**.
   ![Priv_Apppool.png](Priv_Apppool.png)
 - We confirmed the OS/build: **Windows Server 2019 Standard, Build 17763**, running as the primary domain controller.
   ![SystemInfo.png](SystemInfo.png)
