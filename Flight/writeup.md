@@ -112,9 +112,9 @@
 - Back on the shell, we enumerated further and found a folder named `development` under `inetpub` that we can modify. It holds the source files for the internal site we just tunnelled to.
   ![File_Perm.png](File_Perm.png)
 - We uploaded `shell.aspx` into that folder.
-  ![Internal_Web_Shell1.png](Internal_Web_Shell1.png)
+  ![Internal_Web_shell1.png](Internal_Web_shell1.png)
 - We triggered the web shell with a `whoami` command to confirm execution.
-  ![Internal_Web_Shell2.png](Internal_Web_Shell2.png)
+  ![Internal_Web_shell2.png](Internal_Web_shell2.png)
 - With the web shell confirmed, we changed the command to a reverse shell and landed a session as the IIS application-pool identity.
   ![Apppool.png](Apppool.png)
 - Checking `defaultapppool`'s privileges, we found `SeImpersonatePrivilege` **enabled** (alongside `SeChangeNotifyPrivilege` and `SeCreateGlobalPrivilege`).
