@@ -115,7 +115,7 @@
   ![Internal_Web_Shell1.png](Internal_Web_Shell1.png)
 - We triggered the web shell with a `whoami` command to confirm execution.
   ![Internal_Web_Shell2.png](Internal_Web_Shell2.png)
-- With the web shell confirmed, we changed the command to a reverse shell and landed a session as the IIS application-pool identity (`iis apppool\defaultapppool`).
+- With the web shell confirmed, we changed the command to a reverse shell and landed a session as the IIS application-pool identity.
   ![Apppool.png](Apppool.png)
 - Checking `defaultapppool`'s privileges, we found `SeImpersonatePrivilege` **enabled** (alongside `SeChangeNotifyPrivilege` and `SeCreateGlobalPrivilege`).
   ![Priv_Apppool.png](Priv_Apppool.png)
