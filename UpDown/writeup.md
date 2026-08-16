@@ -54,7 +54,7 @@
 - With code execution confirmed, we checked `phpinfo()`'s `disable_functions` list for a way to get a shell. The obvious options `system`, `exec`, `shell_exec`, `popen`, `passthru` were disabled, but `proc_open` was not.
   ![Disable_Functions.png](Disable_Functions.png)
   - **`proc_open`** opens a new process and hands the caller direct control over its input/output/error pipes, similar to `popen`.
-- We downloaded a [`proc_open`-based PHP reverse shell](https://gist.github.com/simran-sankhala/d94bc4e42fee5158395d189ec39ecac4) and packaged it the same way: `rev.php` inside a ZIP renamed to `payload.test`.
+- We downloaded a [`proc_open`-based PHP reverse shell](https://gist.github.com/simran-sankhala/d94bc4e42fee5158395d189ec39ecac4) and packaged it the same way.
   ![Payload2.png](Payload2.png)
 - After uploading it and triggering it the same way as before (via `phar://` through the `page` parameter), we caught a reverse shell as `www-data`.
   ![Request.png](Request.png)
