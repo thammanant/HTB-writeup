@@ -33,7 +33,7 @@
 *   After further enumeration on the system, we discovered an internal virtual host configuration for Apache named `pandora.panda.htb`.
     ![Internal1.png](Internal1.png)
 *   We created an SSH tunnel to forward this internal web service to our local machine. Visiting the site revealed a Pandora FMS login page, noting the version `v7.0NG.742_FIX_PERL2020` at the bottom.
-    ![Internal2.jpg](Internal2.jpg)
+    ![Internal2.png](Internal2.png)
 *   Searching for this version online revealed it is vulnerable to **CVE-2021-32099**, a critical SQL injection vulnerability in the `chart_generator.php` component. This flaw allows an unauthenticated attacker to upgrade their session and completely bypass the login mechanism.
     ![CVE.png](CVE.png)
 *   We found a PoC for this vulnerability in a [GitHub repository](https://github.com/akr3ch/CVE-2021-32099).
@@ -45,7 +45,7 @@
 *   We uploaded a standard PHP web shell.
     ![WebShell2.png](WebShell2.png)
 *   However, when attempting to access it, the file was downloaded instead of executed. By inspecting the server's response, we discovered the exact directory path where our PHP web shell was stored (`/pandora_console/images/webshell.php`).
-    ![WebShell3.jpg](WebShell3.jpg)
+    ![WebShell3.png](WebShell3.png)
 *   Navigating to this path provided us with a working web shell running as the user `matt`.
     ![WebShell4.png](WebShell4.png)
 *   Using the web shell, we executed a reverse shell payload to gain an interactive session as `matt`.
