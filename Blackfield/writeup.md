@@ -54,8 +54,8 @@
 - We verified this user using Impacket's `GetNPUsers` and found that the account was likely deleted.
     ![Domain_Admin_False.png](Domain_Admin_False.png)
 - We then examined the extracted `lsass.DMP` file. The Local Security Authority Subsystem Service (LSASS) process stores active credentials in memory (such as NTLM hashes, Kerberos tickets, and plaintext passwords) to facilitate single sign-on. Parsing this memory dump allows attackers to extract these cached credentials.
-    ![LSASS_Dump.png](LSASS_Dump.png)
 - Using `pypykatz` to parse the LSASS minidump, we successfully extracted the NTLM hash for the user `svc_backup`.
+    ![LSASS_Dump.png](LSASS_Dump.png)
 - Checking Bloodhound, we found that `svc_backup` was a member of the Remote Management Users group and the Backup Operators group.
     ![Bloodhound3.png](Bloodhound3.png)
 - We authenticated to the machine via Evil-WinRM using the `svc_backup` hash and captured the user flag.
