@@ -27,13 +27,13 @@
 
 ## Exploitation
 - We utilized a publicly available Proof of Concept (PoC) from [GitHub](https://github.com/Jnnshschl/CVE-2023-38146) to exploit the ThemeBleed vulnerability.
-  ![ThemeBleed2.jpg](ThemeBleed2.jpg)
+  ![ThemeBleed2.png](ThemeBleed2.png)
 - We executed the PoC script to generate our malicious theme payload, host the rogue SMB server, and set up a Netcat listener to catch the incoming connection.
   ![ThemeBleed3.png](ThemeBleed3.png)
 - We then uploaded the generated `.theme` file to the web application (noting that the `.themepack` extension failed to process).
   ![ThemeBleed4.png](ThemeBleed4.png)
 - Shortly after the upload, the target server connected back to our SMB server and successfully authenticated to request the malicious DLL.
-  ![ThemeBleed5.jpg](ThemeBleed5.jpg)
+  ![ThemeBleed5.png](ThemeBleed5.png)
 - Our listener caught the reverse connection, granting us a shell as the user `sam.emerson`, allowing us to capture the user flag.
   ![Sam.png](Sam.png)
   
@@ -45,7 +45,7 @@
 - We downloaded this document to our local machine for further analysis.
   ![Downloaded.png](Downloaded.png)
 - Reviewing the PDF revealed a security advisory stating that the machine's infrastructure was vulnerable to CVE-2023-28252, a critical privilege escalation flaw within the Windows Common Log File System (CLFS) driver.
-  ![PDF.jpg](PDF.jpg)
+  ![PDF.png](PDF.png)
 - Because the manual exploit chain for this CVE is highly complex, we opted to use Metasploit. First, we upgraded our standard reverse shell to a Meterpreter session. (If you are interested in the exploit chain, visit this ![Github](https://github.com/fortra/CVE-2023-28252))
   ![Meterpreter1.png](Meterpreter1.png)
   ![Meterpreter2.png](Meterpreter2.png)
