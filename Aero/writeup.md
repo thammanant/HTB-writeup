@@ -46,7 +46,7 @@
   ![Downloaded.png](Downloaded.png)
 - Reviewing the PDF revealed a security advisory stating that the machine's infrastructure was vulnerable to CVE-2023-28252, a critical privilege escalation flaw within the Windows Common Log File System (CLFS) driver.
   ![PDF.png](PDF.png)
-- Because the manual exploit chain for this CVE is highly complex, we opted to use Metasploit. First, we upgraded our standard reverse shell to a Meterpreter session. (If you are interested in the exploit chain, visit this ![Github](https://github.com/fortra/CVE-2023-28252))
+- Because the manual exploit chain for this CVE is highly complex, we opted to use Metasploit. First, we upgraded our standard reverse shell to a Meterpreter session. (If you are interested in the exploit chain, visit this [Github](https://github.com/fortra/CVE-2023-28252))
   ![Meterpreter1.png](Meterpreter1.png)
   ![Meterpreter2.png](Meterpreter2.png)
   ![Meterpreter3.png](Meterpreter3.png)
