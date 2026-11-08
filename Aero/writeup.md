@@ -55,4 +55,5 @@
 - We configured the module with the appropriate session ID, `LHOST`, and `LPORT`, and executed the exploit.
   ![CVE2.png](CVE2.png)
 - The exploit successfully injected the payload, dropping us into an interactive shell as `NT AUTHORITY\SYSTEM`, where we secured the root flag.
+
   ![NT_AUTHORITY.png](NT_AUTHORITY.png)
