@@ -72,7 +72,7 @@
 - Because the configuration file did not specify which domain user account this password belonged to, we used `f.frizzle` to enumerate domain users on the target.
   ![Users.png](Users.png)
 - We then spray-tested the decoded password against all domain accounts using SMB, which confirmed the password was valid for user `M.SchoolBus`.
-  ![M_SchooBus.png](M_SchooBus.png)
+  ![M_SchoolBus.png](M_SchoolBus.png)
 - After logging in as `M.SchoolBus`, running `whoami /groups` revealed that the account is a member of `frizz\Group Policy Creator Owners`.
   ![Groups.png](Groups.png)
 - Membership in `Group Policy Creator Owners` gives the user permission to create and manage Group Policy Objects (GPOs) in Active Directory. We downloaded **SharpGPOAbuse.exe** to the target's desktop.
